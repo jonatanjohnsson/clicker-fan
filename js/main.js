@@ -116,7 +116,6 @@ function updateGame(){                         //Updates the number of fans cont
 }
 
 function buildUpgrade(upgrade){                 //Adds the upgrade to the DOM
-    // upgrade.owned = 0;
     $(".upgrade").append(
         '<a href="#" id=' + upgrade.id + ' class="list-group-item tooltipx">' +
             '<img class="bubble-speech" src="' + upgrade.image + '" style="display: inline-block; float: left; background-color: lightblue; width: 60px; height:60px; margin-right: 10px;"> </img>' +
@@ -136,7 +135,6 @@ function buildUpgrade(upgrade){                 //Adds the upgrade to the DOM
 }
 
 function buildPowerup(powerup){                 //Adds a powerup to the DOM
-    //powerup.bought = 1;
     powerup.built = true;
     $("#powerUps").append(
       '<div id="' + powerup.id + '" class="powerUp-item bubble-speech" style="cursor: pointer;">' +
@@ -290,8 +288,6 @@ function canvasFanAppearances () {
 canvasFanAppearances();
 
 CanvasFan.prototype.createFan = function() {        //how to animate each fan
-    //context.fillStyle = "red";
-    //context.fillRect(this.x, this.y, this.width, this.height);
 
     if(this.image == 1){
         context.drawImage(imageObj1, this.x, this.y);
@@ -386,14 +382,6 @@ function saveGame() {
     setCookie("clickerfan-fps", fps, 100);
     setCookie("clickerfan-upgrades", JSON.stringify(upgrades), 100);
     setCookie("clickerfan-powerups", JSON.stringify(powerups), 100);
-
-    /*
-    console.log("saving tf = " + tf);
-    console.log("saving fans = " + fans);
-    console.log("saving fpc = " + fpc);
-    console.log("saving fps = " + fps);
-    console.log("saving upgrades = " + JSON.stringify(upgrades));
-    */
 }
 
 function loadGame() {
@@ -401,33 +389,29 @@ function loadGame() {
     // Load total fans
     if(isCookieSet("clickerfan-tf")) {
         tf = parseFloat(getCookie("clickerfan-tf"));
-        // console.log("tf = " + tf);
     }
     
     // Load current fans
     if(isCookieSet("clickerfan-fans")) {
         fans = parseFloat(getCookie("clickerfan-fans"));
-        // console.log("fans = " + fans);
     }
 
     // Load fans per click
     if(isCookieSet("clickerfan-fpc")) {
         fpc = parseFloat(getCookie("clickerfan-fpc")); 
-        // console.log("fpc = " + fpc);
     }
 
     // Load fans per second
     if(isCookieSet("clickerfan-fps")) {
         fps = parseFloat(getCookie("clickerfan-fps")); 
-        // console.log("fps = " + fps);
     }
 
     // Load bought upgrades
     if(isCookieSet("clickerfan-upgrades")) {
         upgrades = JSON.parse(getCookie("clickerfan-upgrades"));
-        // console.log(upgrades);
     }
 
+    // Load bought powerups
     if(isCookieSet("clickerfan-powerups")) {
         powerups = JSON.parse(getCookie("clickerfan-powerups"));
         console.log(powerups);
@@ -445,13 +429,11 @@ function resetGame() {
 }
 
 $(document).ready(function() {
-    // console.log("Loading game state now!");
     //resetGame();
     loadGame();
     
     for(var i = 0; i < upgrades.length; i++) {
         upgrades[i].built = false;
-        //console.log(upgrades[i].name + ": " + upgrades[i].owned);
     }
 
     for(var i = 0; i < powerups.length; i++)
@@ -461,7 +443,6 @@ $(document).ready(function() {
     }
     
     $(window).on('beforeunload', function() {
-        // console.log("Saving game state now!");
         saveGame();
     });
 });
