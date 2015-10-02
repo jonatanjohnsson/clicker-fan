@@ -33,7 +33,7 @@ var upgrades = [Chord, Song, Charisma, Cassette, Interview];
 
 /*========== Powerups constructor and Powerups ==============*/
 
-function Powerup(name, id, img, flavor, cost, costId, appears, fpc) {
+function Powerup(name, id, img, flavor, cost, costId, appears, fpc, built) {
     this.name = name;           //name of the powerup
     this.id = id;               //id of the powerup
     this.img = img;             //img link of the powerup
@@ -45,8 +45,8 @@ function Powerup(name, id, img, flavor, cost, costId, appears, fpc) {
     this.bought = 0;            //if powerup is bought already
 }
 
-var CoolHat = new Powerup("Cool hat", "coolHat-pwrup", "img/pwrup-hat.png", "A cool hat for a more rocky appearance", 50, "coolHat-pwrup-costId", 10, 0.1);
-var Fender = new Powerup("A Fender guitar", "fender-pwrup", "img/pwrup-fender.png", "A fancy guitar", 100, "fender-pwrup-costId", 100, 0.2);
+var CoolHat = new Powerup("Cool hat", "coolHat-pwrup", "img/pwrup-hat.png", "A cool hat for a more rocky appearance", 50, "coolHat-pwrup-costId", 10, 0.1, false);
+var Fender = new Powerup("A Fender guitar", "fender-pwrup", "img/pwrup-fender.png", "A fancy guitar", 100, "fender-pwrup-costId", 100, 0.2, false);
 
 
 var powerups = [CoolHat, Fender];
@@ -88,7 +88,7 @@ function updateGame(){                         //Updates the number of fans cont
         }
     }
     for(var j = 0; j < powerups.length; j++){
-        if(tf >= powerups[j].appears && powerups[j].bought === 0){
+        if(tf >= powerups[j].appears && powerups[j].built === false){
             buildPowerup(powerups[j]);
         }
 
@@ -136,7 +136,8 @@ function buildUpgrade(upgrade){                 //Adds the upgrade to the DOM
 }
 
 function buildPowerup(powerup){                 //Adds a powerup to the DOM
-    powerup.bought = 1;
+    //powerup.bought = 1;
+    powerup.built = true;
     $("#powerUps").append(
       '<div id="' + powerup.id + '" class="powerUp-item bubble-speech" style="cursor: pointer;">' +
           '<a href="#" class="tooltipz">' +
@@ -207,6 +208,7 @@ function clickPowerup(powerup) {
             fans = fans - powerup.cost;
             fpc = fpc + powerup.fpc;
             $("#" + powerup.id).remove();
+            powerup.bought = 1;
         }
     })
 }
@@ -383,6 +385,7 @@ function saveGame() {
     setCookie("clickerfan-fpc", fpc, 100);
     setCookie("clickerfan-fps", fps, 100);
     setCookie("clickerfan-upgrades", JSON.stringify(upgrades), 100);
+    setCookie("clickerfan-powerups", JSON.stringify(powerups), 100);
 
     /*
     console.log("saving tf = " + tf);
@@ -424,6 +427,11 @@ function loadGame() {
         upgrades = JSON.parse(getCookie("clickerfan-upgrades"));
         // console.log(upgrades);
     }
+
+    if(isCookieSet("clickerfan-powerups")) {
+        powerups = JSON.parse(getCookie("clickerfan-powerups"));
+        console.log(powerups);
+    }
 }
 
 function resetGame() {
@@ -433,6 +441,7 @@ function resetGame() {
     setCookie("clickerfan-fpc", fpc, -1);
     setCookie("clickerfan-fps", fps, -1);
     setCookie("clickerfan-upgrades", upgrades, -1);
+    setCookie("clickerfan-powerups", powerups, -1);
 }
 
 $(document).ready(function() {
@@ -442,7 +451,13 @@ $(document).ready(function() {
     
     for(var i = 0; i < upgrades.length; i++) {
         upgrades[i].built = false;
-        console.log(upgrades[i].name + ": " + upgrades[i].owned);
+        //console.log(upgrades[i].name + ": " + upgrades[i].owned);
+    }
+
+    for(var i = 0; i < powerups.length; i++)
+    {
+	if (powerups[i].bought !== 1)
+	    powerups[i].built = false;
     }
     
     $(window).on('beforeunload', function() {
@@ -450,16 +465,3 @@ $(document).ready(function() {
         saveGame();
     });
 });
-
-
-/*
- function clickPowerup(powerup) {
- $("#powerUps").on("click", ("#" + powerup.id) , function() {
- if(fans >= powerup.cost) {
- fans = fans - powerup.cost;
- fpc = fpc + powerup.fpc;
- $("#" + powerup.id).remove();
- }
- })
- }
- */
