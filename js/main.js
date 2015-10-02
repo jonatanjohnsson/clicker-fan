@@ -4,11 +4,9 @@ var fans = 0;       //current fans
 var fpc = 0.1;        //fans per click
 var fps = 0;        //fans per second
 
-
-
 /*========== Upgrades constructor and Upgrades ==============*/
 
-function Upgrade(name, id, textId, flavor, fps, fpsId, cost, costId, appears, owned, ownedId, image) {
+function Upgrade(name, id, textId, flavor, fps, fpsId, cost, costId, appears, owned, ownedId, image, built) {
     this.name = name;           //name of the upgrade
     this.id = id;               //id of the upgrade
     this.textId = textId;       //id of the upgrade's textbox
@@ -21,14 +19,15 @@ function Upgrade(name, id, textId, flavor, fps, fpsId, cost, costId, appears, ow
     this.owned = owned;         //how many owned
     this.ownedId = ownedId;     //id of the owned number
     this.image = image;         //location of the upgrade's image
+    this.built = built;         //check if element has been built and drawn to the screen
 
 }
 
-var Chord = new Upgrade("Learn a new chord", "chord-upg", "chord-upg-txt", "Expand your guitar skills by learning a new chord!", 0.1, "chord-fpsId", 1, "chord-costId", 4, "none", "chord-ownedId", "img/upg-chord.png");
-var Song = new Upgrade("Write a new song", "song-upg", "song-upg-txt", "Increase your repertoire with a new song!", 0.5, "song-fpsId", 40, "song-costId", 30, "none", "song-ownedId" ,"img/upg-song.png");
-var Charisma = new Upgrade("Work on your charisma", "char-upg", "char-upg-txt", "Become more charming!", 2, "char-fpsId", 150, "char-costId", 200, "none", "char-ownedId", "img/upg-charisma.png");
-var Cassette = new Upgrade("Release a compact cassette", "cassette-upg", "cassette-upg-txt", "Gather your music on an old school cassette for your fans to buy.", 5, "cassette-fpsID", 500, "cassette-costId", 500, "none", "cassette-ownedId", "img/upg-cassette.png");
-var Interview = new Upgrade("Do an interview", "interview-upg", "interview-upg-txt", "Be interviewed by a journalist about your music.", 10, "interview-fpsID", 1600, "interview-costId", 1000, "none", "interview-ownedId", "img/upg-interview.png");
+var Chord = new Upgrade("Learn a new chord", "chord-upg", "chord-upg-txt", "Expand your guitar skills by learning a new chord!", 0.1, "chord-fpsId", 1, "chord-costId", 4, 0, "chord-ownedId", "img/upg-chord.png", false);
+var Song = new Upgrade("Write a new song", "song-upg", "song-upg-txt", "Increase your repertoire with a new song!", 0.5, "song-fpsId", 40, "song-costId", 30, 0, "song-ownedId" ,"img/upg-song.png", false);
+var Charisma = new Upgrade("Work on your charisma", "char-upg", "char-upg-txt", "Become more charming!", 2, "char-fpsId", 150, "char-costId", 200, 0, "char-ownedId", "img/upg-charisma.png", false);
+var Cassette = new Upgrade("Release a compact cassette", "cassette-upg", "cassette-upg-txt", "Gather your music on an old school cassette for your fans to buy.", 5, "cassette-fpsID", 500, "cassette-costId", 500, 0, "cassette-ownedId", "img/upg-cassette.png", false);
+var Interview = new Upgrade("Do an interview", "interview-upg", "interview-upg-txt", "Be interviewed by a journalist about your music.", 10, "interview-fpsID", 1600, "interview-costId", 1000, 0, "interview-ownedId", "img/upg-interview.png", false);
 
 var upgrades = [Chord, Song, Charisma, Cassette, Interview];
 
@@ -84,7 +83,7 @@ function updateGame(){                         //Updates the number of fans cont
     $("#tfCounter").text("tf: " + Math.round( tf * 10 ) / 10);
 
     for(var i = 0; i < upgrades.length; i++) {
-        if(tf >= upgrades[i].appears && upgrades[i].owned === "none"){
+        if(tf >= upgrades[i].appears && upgrades[i].built === false){
             buildUpgrade(upgrades[i]);
         }
     }
@@ -117,7 +116,7 @@ function updateGame(){                         //Updates the number of fans cont
 }
 
 function buildUpgrade(upgrade){                 //Adds the upgrade to the DOM
-    upgrade.owned = 0;
+    // upgrade.owned = 0;
     $(".upgrade").append(
         '<a href="#" id=' + upgrade.id + ' class="list-group-item tooltipx">' +
             '<img class="bubble-speech" src="' + upgrade.image + '" style="display: inline-block; float: left; background-color: lightblue; width: 60px; height:60px; margin-right: 10px;"> </img>' +
@@ -132,7 +131,7 @@ function buildUpgrade(upgrade){                 //Adds the upgrade to the DOM
             '</span>' +
         '</a>');
 
-
+    upgrade.built = true;
     clickUpgrade(upgrade);
 }
 
@@ -352,6 +351,104 @@ function getRandomInt(min, max) {
 
 $("#welcomeButton").click(function(){
     $("#welcomeBox").fadeOut("slow");
+});
+
+/*========== Set up variables and persistance stuff ==============*/
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires;
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return "";
+}
+
+function isCookieSet(cname) {
+    return (getCookie(cname).length > 0) ? true : false;
+}
+
+function saveGame() {
+    // Persist data for a maximum of 100 days
+    setCookie("clickerfan-tf", tf, 100);
+    setCookie("clickerfan-fans", fans, 100);
+    setCookie("clickerfan-fpc", fpc, 100);
+    setCookie("clickerfan-fps", fps, 100);
+    setCookie("clickerfan-upgrades", JSON.stringify(upgrades), 100);
+
+    /*
+    console.log("saving tf = " + tf);
+    console.log("saving fans = " + fans);
+    console.log("saving fpc = " + fpc);
+    console.log("saving fps = " + fps);
+    console.log("saving upgrades = " + JSON.stringify(upgrades));
+    */
+}
+
+function loadGame() {
+    // The vars are already set to 0; only load if there are cookies present
+    // Load total fans
+    if(isCookieSet("clickerfan-tf")) {
+        tf = parseFloat(getCookie("clickerfan-tf"));
+        // console.log("tf = " + tf);
+    }
+    
+    // Load current fans
+    if(isCookieSet("clickerfan-fans")) {
+        fans = parseFloat(getCookie("clickerfan-fans"));
+        // console.log("fans = " + fans);
+    }
+
+    // Load fans per click
+    if(isCookieSet("clickerfan-fpc")) {
+        fpc = parseFloat(getCookie("clickerfan-fpc")); 
+        // console.log("fpc = " + fpc);
+    }
+
+    // Load fans per second
+    if(isCookieSet("clickerfan-fps")) {
+        fps = parseFloat(getCookie("clickerfan-fps")); 
+        // console.log("fps = " + fps);
+    }
+
+    // Load bought upgrades
+    if(isCookieSet("clickerfan-upgrades")) {
+        upgrades = JSON.parse(getCookie("clickerfan-upgrades"));
+        // console.log(upgrades);
+    }
+}
+
+function resetGame() {
+    // Persist data for 0 days 
+    setCookie("clickerfan-tf", tf, -1);
+    setCookie("clickerfan-fans", fans, -1);
+    setCookie("clickerfan-fpc", fpc, -1);
+    setCookie("clickerfan-fps", fps, -1);
+    setCookie("clickerfan-upgrades", upgrades, -1);
+}
+
+$(document).ready(function() {
+    // console.log("Loading game state now!");
+    //resetGame();
+    loadGame();
+    
+    for(var i = 0; i < upgrades.length; i++) {
+        upgrades[i].built = false;
+        console.log(upgrades[i].name + ": " + upgrades[i].owned);
+    }
+    
+    $(window).on('beforeunload', function() {
+        // console.log("Saving game state now!");
+        saveGame();
+    });
 });
 
 
