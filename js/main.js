@@ -414,7 +414,6 @@ function loadGame() {
     // Load bought powerups
     if(isCookieSet("clickerfan-powerups")) {
         powerups = JSON.parse(getCookie("clickerfan-powerups"));
-        console.log(powerups);
     }
 }
 
