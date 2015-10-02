@@ -1,0 +1,97 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Place favicon.ico in the root directory -->
+
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="css/main.css">
+        <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+        <div id="wrapper">
+            <div class="bubble-speech" id="tweepDeck-wrapper">
+                <div id="tweepDeck-header"><img class="bubble-speech" id=tweep-bird src="img/tweeps.png"></div>
+                <div class="sidebar-nav">
+
+                </div>
+            </div>
+
+
+            <div class="bubble-speech" id="upgrades-wrapper">
+                <ul class="upgradebar-nav">
+                    <div class="list-group upgrade">
+                        <!--<a href="#" id="chord-upg" class="list-group-item">
+                            <h5 class="list-group-item-heading">Write a new song </h5>
+                            <p id="chord-upg-txt" class="list-group-item-text">Cost: 10fans, Fps: +1</p>
+                        </a>
+                        <a href="#" id="song-upg" class="list-group-item">
+                            <h4 class="list-group-item-heading">Preform a solo</h4>
+                            <p id="song-upg-txt" class="list-group-item-text">Cost: 100fans, Fps: +10</p>
+                        </a>-->
+                    </div>
+
+                </ul>
+            </div>
+
+            <div id="page-content-wrapper">
+                <div class="page-content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="bubble-speech" id="counterBox">
+                                <h5 id="counter">0</h5>
+                                <p id="fpsCounter">fps: 0</p>
+                                <!--<p id="tfCounter">tf: 0</p>-->
+
+                            </div>
+                            <div class="row noselect">
+                                    <canvas class="bubble-speech" id="canvas" width="400" height="400"></canvas>
+                            </div>
+
+                            <div class="row">
+                                <div class="bubble-speech" id="powerUps">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div id="welcomeBox" class="bubble-speech">
+            <h3 style="margin: 60px;">Welcome to Clicker Fan!</h3>
+            <div style="margin: 0 auto; background-color: black; width: 40%; height: 4px;"> </div>
+            <div style="margin: 20px;">
+                <p>Ever dreamt of becoming a huge artist, but never really had the time to pick up a guitar and learn the ropes?</p>
+                <p>Not to worry - with Clicker Fan you can instead waste that time by clicking the browser window over and over again!
+                Not only will this grant you sweet satisfaction and fulfillment; you will also gain virtual fans in the process!</p>
+                <p>Click the artist avatar in the middle of the screen to begin attempting to impress <span style="font-weight: bold;">fans</span>. The faster you click, the quicker you'll impress them!
+                New <span style="font-weight: bold;">upgrades</span> and <span style="font-weight: bold;">powerups</span> are unlocked once you reach certain amounts of fame, and you can then have your fans influence your career and increase the rate in which you impress new fans (even passively!)</p>
+                <p>Happy clicking!</p>
+            </div>
+            <button id="welcomeButton" type="button" class="btn btn-primary" style="width: 160px;">Start!</button>
+        </div>
+
+
+
+
+
+
+        <script src="js/jquery.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/main.js"></script>
+    </body>
+</html>
