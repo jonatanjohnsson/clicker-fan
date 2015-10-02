@@ -4,7 +4,75 @@ var fans = 0;       //current fans
 var fpc = 0.1;        //fans per click
 var fps = 0;        //fans per second
 
+/*========== Set up variables and persistance stuff ==============*/
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires;
+}
 
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return "";
+}
+
+function isCookieSet(cname) {
+    return (getCookie(cname).length > 0) ? true : false;
+}
+
+function saveGame() {
+    // Persist data for a maximum of 100 days
+    setCookie("clickerfan-tf", tf, 100);
+    setCookie("clickerfan-fans", fans, 100);
+    setCookie("clickerfan-fpc", fpc, 100);
+    setCookie("clickerfan-fps", fps, 100);
+}
+
+function loadGame() {
+    // The vars are already set to 0; only load if there are cookies present
+    // Load total fans
+    if(isCookieSet("clickerfan-tf")) {
+        tf = getCookie("clickerfan-tf"); 
+    }
+    
+    // Load current fans
+    if(isCookieSet("clickerfan-fans")) {
+        fans = getCookie("clickerfan-fans"); 
+    }
+
+    // Load fans per click
+    if(isCookieSet("clickerfan-fpc")) {
+        fpc = getCookie("clickerfan-fpc"); 
+    }
+
+    // Load fans per second
+    if(isCookieSet("clickerfan-fps")) {
+        fps = getCookie("clickerfan-fps"); 
+    }
+}
+
+function resetGame() {
+    // Persist data for 0 days 
+    setCookie("clickerfan-tf", tf, 0);
+    setCookie("clickerfan-fans", fans, 0);
+    setCookie("clickerfan-fpc", fpc, 0);
+    setCookie("clickerfan-fps", fps, 0);
+}
+
+$(window).ready(function() {
+    loadGame();
+});
+
+$(window).unload(function() {
+    saveGame();
+});
 
 /*========== Upgrades constructor and Upgrades ==============*/
 
