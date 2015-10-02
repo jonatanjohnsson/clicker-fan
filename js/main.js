@@ -33,28 +33,38 @@ function saveGame() {
     setCookie("clickerfan-fans", fans, 100);
     setCookie("clickerfan-fpc", fpc, 100);
     setCookie("clickerfan-fps", fps, 100);
+
+    console.log("saving tf = " + tf);
+    console.log("saving fans = " + fans);
+    console.log("saving fpc = " + fpc);
+    console.log("saving fps = " + fps);
+
 }
 
 function loadGame() {
     // The vars are already set to 0; only load if there are cookies present
     // Load total fans
     if(isCookieSet("clickerfan-tf")) {
-        tf = getCookie("clickerfan-tf"); 
+        tf = parseFloat(getCookie("clickerfan-tf"));
+        console.log("tf = " + tf);
     }
     
     // Load current fans
     if(isCookieSet("clickerfan-fans")) {
-        fans = getCookie("clickerfan-fans"); 
+        fans = parseFloat(getCookie("clickerfan-fans"));
+        console.log("fans = " + fans);
     }
 
     // Load fans per click
     if(isCookieSet("clickerfan-fpc")) {
-        fpc = getCookie("clickerfan-fpc"); 
+        fpc = parseFloat(getCookie("clickerfan-fpc")); 
+        console.log("fpc = " + fpc);
     }
 
     // Load fans per second
     if(isCookieSet("clickerfan-fps")) {
-        fps = getCookie("clickerfan-fps"); 
+        fps = parseFloat(getCookie("clickerfan-fps")); 
+        console.log("fps = " + fps);
     }
 }
 
@@ -66,12 +76,14 @@ function resetGame() {
     setCookie("clickerfan-fps", fps, 0);
 }
 
-$(window).ready(function() {
+$(document).ready(function() {
+    console.log("Loading game state now!");
     loadGame();
-});
 
-$(window).unload(function() {
-    saveGame();
+    $(window).on('beforeunload', function() {
+        console.log("Saving game state now!");
+        saveGame();
+    });
 });
 
 /*========== Upgrades constructor and Upgrades ==============*/
