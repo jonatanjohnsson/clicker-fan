@@ -4,88 +4,6 @@ var fans = 0;       //current fans
 var fpc = 0.1;        //fans per click
 var fps = 0;        //fans per second
 
-/*========== Set up variables and persistance stuff ==============*/
-function setCookie(cname, cvalue, exdays) {
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    var expires = "expires="+d.toUTCString();
-    document.cookie = cname + "=" + cvalue + "; " + expires;
-}
-
-function getCookie(cname) {
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0; i<ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1);
-        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
-    }
-    return "";
-}
-
-function isCookieSet(cname) {
-    return (getCookie(cname).length > 0) ? true : false;
-}
-
-function saveGame() {
-    // Persist data for a maximum of 100 days
-    setCookie("clickerfan-tf", tf, 100);
-    setCookie("clickerfan-fans", fans, 100);
-    setCookie("clickerfan-fpc", fpc, 100);
-    setCookie("clickerfan-fps", fps, 100);
-
-    console.log("saving tf = " + tf);
-    console.log("saving fans = " + fans);
-    console.log("saving fpc = " + fpc);
-    console.log("saving fps = " + fps);
-
-}
-
-function loadGame() {
-    // The vars are already set to 0; only load if there are cookies present
-    // Load total fans
-    if(isCookieSet("clickerfan-tf")) {
-        tf = parseFloat(getCookie("clickerfan-tf"));
-        console.log("tf = " + tf);
-    }
-    
-    // Load current fans
-    if(isCookieSet("clickerfan-fans")) {
-        fans = parseFloat(getCookie("clickerfan-fans"));
-        console.log("fans = " + fans);
-    }
-
-    // Load fans per click
-    if(isCookieSet("clickerfan-fpc")) {
-        fpc = parseFloat(getCookie("clickerfan-fpc")); 
-        console.log("fpc = " + fpc);
-    }
-
-    // Load fans per second
-    if(isCookieSet("clickerfan-fps")) {
-        fps = parseFloat(getCookie("clickerfan-fps")); 
-        console.log("fps = " + fps);
-    }
-}
-
-function resetGame() {
-    // Persist data for 0 days 
-    setCookie("clickerfan-tf", tf, 0);
-    setCookie("clickerfan-fans", fans, 0);
-    setCookie("clickerfan-fpc", fpc, 0);
-    setCookie("clickerfan-fps", fps, 0);
-}
-
-$(document).ready(function() {
-    console.log("Loading game state now!");
-    loadGame();
-
-    $(window).on('beforeunload', function() {
-        console.log("Saving game state now!");
-        saveGame();
-    });
-});
-
 /*========== Upgrades constructor and Upgrades ==============*/
 
 function Upgrade(name, id, textId, flavor, fps, fpsId, cost, costId, appears, owned, ownedId, image) {
@@ -432,6 +350,101 @@ function getRandomInt(min, max) {
 
 $("#welcomeButton").click(function(){
     $("#welcomeBox").fadeOut("slow");
+});
+
+/*========== Set up variables and persistance stuff ==============*/
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires;
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return "";
+}
+
+function isCookieSet(cname) {
+    return (getCookie(cname).length > 0) ? true : false;
+}
+
+function saveGame() {
+    // Persist data for a maximum of 100 days
+    setCookie("clickerfan-tf", tf, 100);
+    setCookie("clickerfan-fans", fans, 100);
+    setCookie("clickerfan-fpc", fpc, 100);
+    setCookie("clickerfan-fps", fps, 100);
+    setCookie("clickerfan-upgrades", JSON.stringify(upgrades), 100);
+
+    /*
+    console.log("saving tf = " + tf);
+    console.log("saving fans = " + fans);
+    console.log("saving fpc = " + fpc);
+    console.log("saving fps = " + fps);
+    console.log("saving upgrades = " + JSON.stringify(upgrades));
+    */
+}
+
+function loadGame() {
+    // The vars are already set to 0; only load if there are cookies present
+    // Load total fans
+    if(isCookieSet("clickerfan-tf")) {
+        tf = parseFloat(getCookie("clickerfan-tf"));
+        // console.log("tf = " + tf);
+    }
+    
+    // Load current fans
+    if(isCookieSet("clickerfan-fans")) {
+        fans = parseFloat(getCookie("clickerfan-fans"));
+        // console.log("fans = " + fans);
+    }
+
+    // Load fans per click
+    if(isCookieSet("clickerfan-fpc")) {
+        fpc = parseFloat(getCookie("clickerfan-fpc")); 
+        // console.log("fpc = " + fpc);
+    }
+
+    // Load fans per second
+    if(isCookieSet("clickerfan-fps")) {
+        fps = parseFloat(getCookie("clickerfan-fps")); 
+        // console.log("fps = " + fps);
+    }
+
+    // Load bought upgrades
+    if(isCookieSet("clickerfan-upgrades")) {
+        upgrades = JSON.parse(getCookie("clickerfan-upgrades"));
+        // console.log(upgrades);
+    }
+}
+
+function resetGame() {
+    // Persist data for 0 days 
+    setCookie("clickerfan-tf", tf, -1);
+    setCookie("clickerfan-fans", fans, -1);
+    setCookie("clickerfan-fpc", fpc, -1);
+    setCookie("clickerfan-fps", fps, -1);
+}
+
+$(document).ready(function() {
+    // console.log("Loading game state now!");
+    loadGame();
+    
+    for(var i = 0; i < upgrades.length; i++) {
+        console.log(upgrades[i].name + ": " + upgrades[i].owned);
+    }
+    
+    $(window).on('beforeunload', function() {
+        // console.log("Saving game state now!");
+        saveGame();
+    });
 });
 
 
