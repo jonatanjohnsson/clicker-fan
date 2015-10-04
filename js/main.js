@@ -351,6 +351,12 @@ $("#welcomeButton").click(function(){
     $("#welcomeBox").fadeOut("slow");
 });
 
+$("#resetButton").click(function(){
+    resetGame();
+    alert("Your saved progress has been deleted");
+    location.reload();
+});
+
 /*========== Set up variables and persistance stuff ==============*/
 
 function setCookie(cname, cvalue, exdays) {
