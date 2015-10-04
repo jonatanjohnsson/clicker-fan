@@ -354,6 +354,7 @@ $("#welcomeButton").click(function(){
 });
 
 /*========== Set up variables and persistance stuff ==============*/
+
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
@@ -383,6 +384,7 @@ function saveGame() {
     setCookie("clickerfan-fpc", fpc, 100);
     setCookie("clickerfan-fps", fps, 100);
     setCookie("clickerfan-upgrades", JSON.stringify(upgrades), 100);
+    setCookie("clickerfan-powerups", JSON.stringify(powerups), 100);
 
     /*
     console.log("saving tf = " + tf);
@@ -424,6 +426,13 @@ function loadGame() {
         upgrades = JSON.parse(getCookie("clickerfan-upgrades"));
         // console.log(upgrades);
     }
+
+    // Load bought powerups
+    if(isCookieSet("clickerfan-powerups")) {
+        powerups = JSON.parse(getCookie("clickerfan-powerups"));
+        // console.log(upgrades);
+    }
+
 }
 
 function resetGame() {
@@ -433,6 +442,7 @@ function resetGame() {
     setCookie("clickerfan-fpc", fpc, -1);
     setCookie("clickerfan-fps", fps, -1);
     setCookie("clickerfan-upgrades", upgrades, -1);
+    setCookie("clickerfan-powerups", powerups, -1);
 }
 
 $(document).ready(function() {
