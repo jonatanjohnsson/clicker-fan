@@ -376,12 +376,19 @@ function isCookieSet(cname) {
 
 function saveGame() {
     // Persist data for a maximum of 100 days
-    setCookie("clickerfan-tf", tf, 100);
-    setCookie("clickerfan-fans", fans, 100);
-    setCookie("clickerfan-fpc", fpc, 100);
-    setCookie("clickerfan-fps", fps, 100);
-    setCookie("clickerfan-upgrades", JSON.stringify(upgrades), 100);
-    setCookie("clickerfan-powerups", JSON.stringify(powerups), 100);
+    if(!isCookieSet("clickerfan-reset"))
+    {
+        setCookie("clickerfan-tf", tf, 100);
+        setCookie("clickerfan-fans", fans, 100);
+        setCookie("clickerfan-fpc", fpc, 100);
+        setCookie("clickerfan-fps", fps, 100);
+        setCookie("clickerfan-upgrades", JSON.stringify(upgrades), 100);
+        setCookie("clickerfan-powerups", JSON.stringify(powerups), 100);
+    }
+    else
+    {
+        setCookie("clickerfan-reset", "0", -1);
+    }
 }
 
 function loadGame() {
@@ -425,6 +432,7 @@ function resetGame() {
     setCookie("clickerfan-fps", fps, -1);
     setCookie("clickerfan-upgrades", upgrades, -1);
     setCookie("clickerfan-powerups", powerups, -1);
+    setCookie("clickerfan-reset", "1", 1);
 }
 
 $(document).ready(function() {
