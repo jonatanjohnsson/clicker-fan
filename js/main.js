@@ -428,6 +428,7 @@ function resetGame() {
 }
 
 $(document).ready(function() {
+    //initTouch();
     //resetGame();
     loadGame();
     
@@ -444,4 +445,6 @@ $(document).ready(function() {
     $(window).on('beforeunload', function() {
         saveGame();
     });
+    
+    $("#canvas").nodoubletapzoom();
 });
